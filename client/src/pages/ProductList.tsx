@@ -169,17 +169,20 @@ const ProductList: React.FC<ProductListProps> = ({ searchQuery }) => {
                 <h2 className="product-title">{product.title}</h2>
                 <div className="pricing-container">
                   <p className="deal-price">
-                    Deal Price: <strong>₹ {formatPrice(product.price)}</strong>
+                    Deal Price: <strong> {formatPrice(product.price)}</strong>
                   </p>
                   <p className="mrp">
                     MRP:{" "}
                     <span className="strike">
-                      ₹ {formatPrice(product.mrp ?? 0)}
+                      {formatPrice(product.mrp ?? 0)}
                     </span>
                   </p>
                   <p className="you-save">
-                    You Save: ₹ {formatPrice(product.youSave ?? 0)} (
+                    You Save: {formatPrice(product.youSave ?? 0)} (
                     {product.discountPercentage}%)
+                  </p>
+                  <p className="you-save">
+                    Total Stock: {product.quantity} units
                   </p>
                   <p className="rating">
                     {Array(5)

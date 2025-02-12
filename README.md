@@ -161,6 +161,19 @@ npm start
 | `POST`   | `/api/orders`          | Place an order           |
 | `GET`    | `/api/orders`          | Get user order history   |
 
+## 🎨 UI Preview
+
+Here are some previews of the key pages in the application:
+
+| **Page**                  | **Preview**                                          |
+| ------------------------- | ---------------------------------------------------- |
+| **Product List Page**     | ![Product List](https://i.imgur.com/Pz545IJ.png)     |
+| **Sign Up Page**          | ![Sign Up](https://i.imgur.com/UEG2aNu.png)          |
+| **Login Page**            | ![Login](https://i.imgur.com/fwFprRE.png)            |
+| **Cart Page**             | ![Cart](https://i.imgur.com/cJp0dGM.png)             |
+| **Shipping Details Page** | ![Shipping Details](https://i.imgur.com/vRKvbtD.png) |
+| **Order History Page**    | ![Order History](https://i.imgur.com/O4DuvED.png)    |
+
 ## 🔐 Credentials
 
 Use the following credentials for testing:
@@ -181,3 +194,5 @@ This project is licensed under the MIT License.
 ---
 
 Made with ❤️ by [Sourav Paul](https://github.com/souravpl8092) 🚀
+
+---

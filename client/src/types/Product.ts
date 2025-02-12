@@ -14,6 +14,7 @@ export interface Product {
   mrp?: number;
   youSave?: number;
   totalPages: number;
+  quantity: number;
 }
 
 // ✅ Cart Product - A simplified version of `Product` for cart items

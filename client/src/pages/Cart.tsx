@@ -100,8 +100,9 @@ const Cart: React.FC = () => {
                       />
                       <div>
                         <h3 className="cart-item-title">{item.title}</h3>
+
                         <p className="cart-item-price">
-                          ₹ {formatPrice(item.price)}
+                          Offer Price: {formatPrice(item.price)}
                         </p>
                         <p className="cart-item-quantity">
                           Qty:
@@ -143,12 +144,12 @@ const Cart: React.FC = () => {
               </div>
               <div className="cart-summary">
                 <h3>Price Details</h3>
-                <p>Product Value: ₹ {formatPrice(totalPrice)}</p>
+                <p>Product Value: {formatPrice(totalPrice)}</p>
                 <p>
                   Quantity:{" "}
                   {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
                 </p>
-                <h3>Total: ₹ {totalPrice.toFixed(2)}</h3>
+                <h3>Total: {formatPrice(totalPrice)}</h3>
                 <button
                   className="checkout-button"
                   onClick={() => navigate("/shipping")}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   FaShoppingCart,
@@ -6,6 +6,7 @@ import {
   FaSignOutAlt,
   FaBoxOpen,
   FaSearch,
+  FaHome,
 } from "react-icons/fa";
 import { RootState } from "../store/store";
 import { logout } from "../store/slices/authSlice";
@@ -26,6 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) => {
   const navigate = useNavigate();
   const [modalType, setModalType] = useState<"login" | "signup" | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
   const { isAuthenticated, user } = useSelector(
@@ -42,14 +44,41 @@ const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) => {
     logoutApi();
     dispatch(logout());
     toast.success("Logged out successfully!");
+    setDropdownOpen(false);
     setTimeout(() => {
       window.location.reload();
     }, 100);
   };
 
+  // ✅ Handle navigation and close dropdown
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    setDropdownOpen(false); // Close dropdown after navigation
+  };
+
+  // ✅ Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <nav className="navbar">
-      <div className="logo" onClick={() => navigate("/")}>
+      <div
+        className="logo"
+        onClick={() => navigate("/")}
+        title="Back to Home Page"
+      >
         <h1 className="shopkart-title">
           Shop<span>kart</span>
         </h1>
@@ -87,7 +116,7 @@ const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) => {
         )}
 
         {isAuthenticated ? (
-          <div className="profile-container">
+          <div className="profile-container" ref={dropdownRef}>
             <button
               type="button"
               className={`profile-btn ${dropdownOpen ? "open" : ""}`}
@@ -99,14 +128,37 @@ const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) => {
             </button>
             {dropdownOpen && (
               <div className="dropdown-menu">
+                {/* ✅ Back to Home */}
+                <button
+                  type="button"
+                  className="dropdown-item"
+                  title="Back to Home"
+                  onClick={() => handleNavigate("/")}
+                >
+                  <FaHome /> Home
+                </button>
+
+                {/* ✅ View Cart */}
+                <button
+                  type="button"
+                  className="dropdown-item"
+                  title="View Cart"
+                  onClick={() => handleNavigate("/cart")}
+                >
+                  <FaShoppingCart /> View Cart
+                </button>
+
+                {/* ✅ Order History */}
                 <button
                   type="button"
                   className="dropdown-item"
                   title="Order History"
-                  onClick={() => navigate("/order")}
+                  onClick={() => handleNavigate("/order")}
                 >
                   <FaBoxOpen /> Order History
                 </button>
+
+                {/* ✅ Logout */}
                 <button
                   type="button"
                   className="dropdown-item logout"

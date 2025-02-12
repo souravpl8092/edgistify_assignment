@@ -12,6 +12,7 @@ interface IProduct extends Document {
     rate: number;
     count: number;
   };
+  quantity: number;
 }
 
 // ✅ Define Mongoose Schema
@@ -27,6 +28,7 @@ const ProductSchema = new Schema<IProduct>(
       rate: { type: Number, required: true },
       count: { type: Number, required: true },
     },
+    quantity: { type: Number, required: true, default: 1 },
   },
   {
     timestamps: true,

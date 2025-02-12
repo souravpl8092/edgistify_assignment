@@ -9,15 +9,16 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { resetShipping } from "../store/slices/shippingSlice";
+import axios from "axios";
 import "../styles/ShippingForm.css";
 
 const ShippingForm: React.FC = () => {
   const dispatch = useAppDispatch<AppDispatch>();
+  const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.auth.token);
   const { address, city, state, zipCode, landmark, country, isValid } =
     useSelector((state: RootState) => state.shipping);
-
   const cart = useSelector((state: RootState) => state.cart);
   const cartItems = cart.products ?? [];
 
@@ -31,12 +32,43 @@ const ShippingForm: React.FC = () => {
     e.preventDefault();
 
     try {
+      const response = await axios.get(`${apiUrl}/api/product/`);
+
+      const productStockMap = new Map<string, number>(
+        response.data.products.map(
+          (product: { _id: string; quantity: number }) => [
+            product._id,
+            product.quantity,
+          ]
+        )
+      );
+
+      // Check if all cart products have sufficient stock
+      const outOfStockItems = cartItems.filter((item) => {
+        const availableStock = productStockMap.get(item.productId);
+        return availableStock !== undefined && availableStock < item.quantity;
+      });
+
+      if (outOfStockItems.length > 0) {
+        outOfStockItems.forEach((item) => {
+          toast.error(
+            `❌ Stock insufficient for ${item.title}. Available stock: ${
+              productStockMap.get(item.productId) ?? 0
+            } units, Requested: ${item.quantity} units`,
+            { position: "top-right" }
+          );
+        });
+        return;
+      }
+
+      // Prepare order data
       const orderData = {
         shippingAddress: `${address}, ${city}, ${state}, ${zipCode}, ${country}`,
         products: cartItems,
         token: token || "",
       };
 
+      // Dispatch create order action
       const resultAction = await dispatch(createOrder(orderData));
 
       if (createOrder.fulfilled.match(resultAction)) {
@@ -48,14 +80,12 @@ const ShippingForm: React.FC = () => {
           dispatch(clearCart(token));
         }
 
-        // Clear shipping form fields after 2 seconds
         setTimeout(() => {
           dispatch(resetShipping());
         }, 2000);
 
-        // Redirect to order history after 1 second
         setTimeout(() => navigate("/order"), 500);
-      } else if (createOrder.rejected.match(resultAction)) {
+      } else {
         toast.error("❌ Order creation failed. Please try again.", {
           position: "top-right",
         });
