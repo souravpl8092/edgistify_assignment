@@ -167,12 +167,12 @@ Here are some previews of the key pages in the application:
 
 | **Page**                  | **Preview**                                          |
 | ------------------------- | ---------------------------------------------------- |
-| **Product List Page**     | ![Product List](https://i.imgur.com/Pz545IJ.png)     |
-| **Sign Up Page**          | ![Sign Up](https://i.imgur.com/UEG2aNu.png)          |
-| **Login Page**            | ![Login](https://i.imgur.com/fwFprRE.png)            |
-| **Cart Page**             | ![Cart](https://i.imgur.com/cJp0dGM.png)             |
+| **Product List Page**     | ![Product List](https://i.imgur.com/nCUz69A.png)     |
+| **Sign Up Page**          | ![Sign Up](https://i.imgur.com/kONsKqA.png)          |
+| **Login Page**            | ![Login](https://i.imgur.com/Y5DKbgG.png)            |
+| **Cart Page**             | ![Cart](https://i.imgur.com/19WfnxP.png)             |
 | **Shipping Details Page** | ![Shipping Details](https://i.imgur.com/vRKvbtD.png) |
-| **Order History Page**    | ![Order History](https://i.imgur.com/O4DuvED.png)    |
+| **Order History Page**    | ![Order History](https://i.imgur.com/yQdiqDW.png)    |
 
 ## 🔐 Credentials
 
