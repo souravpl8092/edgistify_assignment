@@ -1,9 +1,7 @@
 import axios from "axios";
 import { Product } from "../types/Product";
 
-// const apiUrl = process.env.REACT_APP_API_URL;
-
-const apiUrl = "http://localhost:8080";
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export const fetchProducts = async (
   searchQuery: string,
