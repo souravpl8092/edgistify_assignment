@@ -1,0 +1,152 @@
+/* Navbar styles */
+.navbar {
+  position: fixed; /* Fix the navbar at the top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #ff4b2b, #ff416c);
+  /* padding: 10px 20px; */
+
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensures navbar stays on top */
+  flex-wrap: wrap;
+}
+
+/* Brand logo */
+.brand {
+  flex: 1;
+  text-align: left;
+  margin-left: 20px;
+}
+
+.shopkart-title {
+  font-size: 28px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: white;
+}
+
+.shopkart-title span {
+  color: yellow;
+}
+
+/* Search bar container */
+.search-container {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 5px;
+  border-radius: 25px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: 12px;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 25px;
+}
+
+.search-bar button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #ff4b2b;
+  padding: 5px 10px;
+}
+
+/* Icons and buttons */
+.nav-icons {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-right: 20px;
+}
+
+.nav-icons button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: white;
+}
+
+/* Login Button */
+.nav-icons .login-btn {
+  background: linear-gradient(90deg, #ffc107, #ffb300);
+  color: #333;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 25px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover effect with glow */
+.nav-icons .login-btn:hover {
+  background: linear-gradient(90deg, #ffb300, #ffc107);
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(255, 193, 7, 0.5);
+}
+
+/* Click effect */
+.nav-icons .login-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 3px 8px rgba(255, 193, 7, 0.7);
+}
+
+/* Ensure content doesn't hide behind the navbar */
+body {
+  padding-top: 70px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .nav-icons {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .search-container {
+    width: 100%;
+  }
+
+  .search-bar {
+    max-width: 90%;
+  }
+
+  .nav-icons .login-btn {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+}
