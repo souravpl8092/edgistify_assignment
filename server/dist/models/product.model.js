@@ -36,21 +36,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 // ✅ Define Mongoose Schema
 const ProductSchema = new mongoose_1.Schema({
-    id: { type: Number, required: true },
-    brand: { type: String, required: true },
-    deviceModel: { type: String, required: true },
-    os: { type: String, required: true },
-    release: { type: Number, required: true },
-    ip_address: { type: String, required: true },
+    id: { type: Number, required: true, unique: true },
+    title: { type: String, required: true },
     price: { type: Number, required: true },
-    quantity: { type: Number, required: true },
+    description: { type: String, required: true },
+    category: { type: String, required: true },
     image: { type: String, required: true },
-    brand_name: { type: String, required: true },
-    company_name: { type: String, required: true },
-    ram: { type: String, required: true },
-    internal_storage: { type: String, required: true },
-    processor: { type: String, required: true },
-    date_added: { type: String, required: true },
+    rating: {
+        rate: { type: Number, required: true },
+        count: { type: Number, required: true },
+    },
 }, {
     timestamps: true,
 });

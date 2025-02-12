@@ -1,0 +1,197 @@
+/* General Styling */
+.order-history-container {
+  min-height: 40vh;
+  width: auto;
+  margin: auto;
+  padding: 40px;
+  background: #f4f4f4;
+}
+
+h2 {
+  text-align: center;
+  font-size: 26px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Empty Orders Message */
+.empty-message {
+  text-align: center;
+  font-size: 18px;
+  color: gray;
+}
+
+/* Order List */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Order Card */
+.order-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease-in-out;
+}
+
+.order-card:hover {
+  transform: translateY(-5px);
+}
+
+.order-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+/* Order Details */
+.order-details {
+  flex: 1;
+}
+
+.order-details h3 {
+  font-size: 18px;
+  color: #222;
+  margin-bottom: 5px;
+}
+
+.order-details p {
+  margin: 3px 0;
+  font-size: 15px;
+  color: #555;
+}
+
+/* Status Section - Aligned to Right */
+.status-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.status-section p {
+  color: #222;
+  /* font-weight: 700; */
+}
+
+/* Order Status Styling */
+.status {
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 5px;
+  display: inline-block;
+  text-transform: uppercase;
+  width: 120px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.status.pending {
+  background: #ff9800;
+  color: white;
+}
+
+.status.processing {
+  background: #03a9f4;
+  color: white;
+}
+
+.status.shipped {
+  background: #4caf50;
+  color: white;
+}
+
+.status.delivered {
+  background: #2e7d32;
+  color: white;
+}
+
+/* Payment Status Styling */
+.payment {
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 5px;
+  display: inline-block;
+  text-transform: uppercase;
+  width: 120px;
+  text-align: center;
+}
+
+.payment.pending {
+  background: #ffeb3b;
+  color: black;
+}
+
+.payment.paid {
+  background: #4caf50;
+  color: white;
+}
+
+.payment.failed {
+  background: #f44336;
+  color: white;
+}
+
+/* Order Date */
+.order-date {
+  font-size: 14px;
+  color: #777;
+  margin-top: 5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .order-history-container {
+    width: 95%;
+  }
+
+  .order-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .order-card img {
+    margin-bottom: 10px;
+  }
+
+  .status-section {
+    align-items: center;
+    margin-top: 10px;
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #555;
+  margin: 20px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(0, 0, 0, 0.3);
+  border-top: 3px solid #000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

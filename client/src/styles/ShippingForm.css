@@ -1,0 +1,90 @@
+/* Ensures form is visible below navbar */
+.shipping-form-container {
+  max-width: 800px;
+  margin: 60px auto 50px; /* Adds margin to avoid navbar overlap */
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Title */
+.form-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Grid layout for inputs */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+/* Full-width input for single-row fields */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10%;
+}
+
+/* Label styling */
+.shipping-form-container label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* Input field styling */
+.form-input {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+/* Focus effect on input */
+.form-input:focus {
+  border-color: #007bff;
+  outline: none;
+  background-color: #eef6ff;
+}
+
+/* Submit button */
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #ffcc00; /* Yellow Theme */
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s ease;
+}
+
+/* Button hover effect */
+.submit-button:hover {
+  background-color: #ffb300;
+  box-shadow: 0 6px 15px rgba(255, 204, 0, 0.5);
+  transform: scale(1.05);
+}
+
+/* Disabled button styling */
+.submit-button:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr; /* Stack inputs on smaller screens */
+  }
+}

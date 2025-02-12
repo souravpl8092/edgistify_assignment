@@ -12,25 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cancelOrder = exports.updateOrderStatus = exports.createOrder = exports.getOrdersByUserId = exports.getAllOrders = void 0;
+exports.createOrder = exports.getOrdersByUserId = void 0;
 const order_model_1 = __importDefault(require("../models/order.model"));
-// ✅ GET all orders (Admin only)
-const getAllOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const orders = yield order_model_1.default.find().populate("products.productId");
-        res.json(orders);
-    }
-    catch (error) {
-        res.status(500).json({ message: "Server error" });
-    }
-});
-exports.getAllOrders = getAllOrders;
+const paymentStatuses = ["Pending", "Paid", "Failed"];
+const orderStatuses = ["Pending", "Processing", "Shipped", "Delivered"];
+const getRandomStatus = (statuses) => {
+    return statuses[Math.floor(Math.random() * statuses.length)];
+};
 // ✅ GET orders by user ID
 const getOrdersByUserId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
-        const orders = yield order_model_1.default.find({ userId }).populate("products.productId");
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
+        const orders = yield order_model_1.default.find({ userId });
         if (!orders.length) {
             res.status(404).json({ message: "No orders found" });
             return;
@@ -46,64 +40,41 @@ exports.getOrdersByUserId = getOrdersByUserId;
 const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
-        const { products, shippingAddress, totalPrice } = req.body;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
+        const { products, shippingAddress } = req.body;
         if (!products || products.length === 0) {
             res.status(400).json({ message: "No products in the order" });
             return;
         }
-        const newOrder = new order_model_1.default({
-            userId,
-            products,
-            totalPrice,
-            shippingAddress,
-            paymentStatus: "Pending",
-            orderStatus: "Pending",
+        const createdOrders = [];
+        for (const product of products) {
+            const newOrder = new order_model_1.default({
+                userId,
+                products: [
+                    {
+                        productId: product.productId,
+                        quantity: product.quantity,
+                        price: product.price,
+                        title: product.title,
+                        image: product.image,
+                    },
+                ],
+                totalPrice: product.price * product.quantity,
+                shippingAddress,
+                paymentStatus: getRandomStatus(paymentStatuses),
+                orderStatus: getRandomStatus(orderStatuses),
+            });
+            const savedOrder = yield newOrder.save();
+            createdOrders.push(savedOrder);
+        }
+        res.status(201).json({
+            message: "Orders created successfully",
+            orders: createdOrders,
         });
-        yield newOrder.save();
-        res.status(201).json(newOrder);
     }
     catch (error) {
-        res.status(500).json({ message: "Server error" });
+        console.error("Error creating order:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 exports.createOrder = createOrder;
-// ✅ PUT - Update order status (Admin only)
-const updateOrderStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { orderId } = req.params;
-        const { orderStatus, paymentStatus } = req.body;
-        const order = yield order_model_1.default.findById(orderId);
-        if (!order) {
-            res.status(404).json({ message: "Order not found" });
-            return;
-        }
-        if (orderStatus)
-            order.orderStatus = orderStatus;
-        if (paymentStatus)
-            order.paymentStatus = paymentStatus;
-        yield order.save();
-        res.json(order);
-    }
-    catch (error) {
-        res.status(500).json({ message: "Server error" });
-    }
-});
-exports.updateOrderStatus = updateOrderStatus;
-// ✅ DELETE - Cancel order
-const cancelOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { orderId } = req.params;
-        const order = yield order_model_1.default.findById(orderId);
-        if (!order) {
-            res.status(404).json({ message: "Order not found" });
-            return;
-        }
-        yield order_model_1.default.findByIdAndDelete(orderId);
-        res.json({ message: "Order cancelled successfully" });
-    }
-    catch (error) {
-        res.status(500).json({ message: "Server error" });
-    }
-});
-exports.cancelOrder = cancelOrder;

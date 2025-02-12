@@ -29,7 +29,9 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <p className="footer-bottom">© 2025 Mobile Store | All Rights Reserved</p>
+      <p className="footer-bottom">
+        © 2025 Product Store | All Rights Reserved
+      </p>
     </footer>
   );
 };

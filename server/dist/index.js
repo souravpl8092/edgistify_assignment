@@ -8,7 +8,6 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const db_1 = require("./configs/db");
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
-const user_routes_1 = __importDefault(require("./routes/user.routes"));
 const product_routes_1 = __importDefault(require("./routes/product.routes"));
 const cart_routes_1 = __importDefault(require("./routes/cart.routes"));
 const order_routes_1 = __importDefault(require("./routes/order.routes"));
@@ -24,10 +23,9 @@ app.get("/", (req, res) => {
 });
 // Routes
 app.use("/api/auth", auth_routes_1.default);
-app.use("/api/user", user_routes_1.default);
 app.use("/api/product", product_routes_1.default);
 app.use("/api/cart", cart_routes_1.default);
-app.use("/api/orders", order_routes_1.default);
+app.use("/api/order", order_routes_1.default);
 (0, db_1.connectToDatabase)()
     .then(() => {
     app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

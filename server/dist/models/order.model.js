@@ -45,6 +45,8 @@ const OrderSchema = new mongoose_1.Schema({
             },
             quantity: { type: Number, required: true },
             price: { type: Number, required: true },
+            title: { type: String, required: true },
+            image: { type: String, required: true },
         },
     ],
     totalPrice: { type: Number, required: true },
@@ -59,6 +61,12 @@ const OrderSchema = new mongoose_1.Schema({
         enum: ["Pending", "Processing", "Shipped", "Delivered"],
         default: "Pending",
     },
+    orderId: {
+        type: String,
+        required: true,
+        default: () => new mongoose_1.default.Types.ObjectId().toString(),
+    },
+    date: { type: Date, default: Date.now },
 });
 const Order = mongoose_1.default.model("Order", OrderSchema);
 exports.default = Order;

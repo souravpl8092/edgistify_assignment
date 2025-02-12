@@ -29,8 +29,8 @@ exports.getAllCarts = getAllCarts;
 const getCartByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id; // Extract userId from token
-        const cart = yield cart_model_1.default.findOne({ userId }).populate("products.productId");
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
+        const cart = yield cart_model_1.default.findOne({ userId });
         if (!cart) {
             res.status(404).json({ message: "Cart not found" });
             return;
@@ -45,12 +45,15 @@ exports.getCartByUser = getCartByUser;
 // ✅ POST - Add item to cart
 const addToCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
+    const { productId, title, price, image, quantity } = req.body;
     try {
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
-        const { productId, quantity } = req.body;
         let cart = yield cart_model_1.default.findOne({ userId });
         if (!cart) {
-            cart = new cart_model_1.default({ userId, products: [{ productId, quantity }] });
+            cart = new cart_model_1.default({
+                userId,
+                products: [{ productId, title, price, image, quantity }],
+            });
         }
         else {
             const existingProduct = cart.products.find((p) => p.productId.toString() === productId);
@@ -58,7 +61,7 @@ const addToCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 existingProduct.quantity += quantity;
             }
             else {
-                cart.products.push({ productId, quantity });
+                cart.products.push({ productId, title, price, image, quantity });
             }
         }
         yield cart.save();
@@ -73,25 +76,22 @@ exports.addToCart = addToCart;
 const updateCartItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
         const { productId, quantity } = req.body;
         const cart = yield cart_model_1.default.findOne({ userId });
         if (!cart) {
             res.status(404).json({ message: "Cart not found" });
             return;
         }
-        // Find the product in the cart
         const productIndex = cart.products.findIndex((p) => p.productId.toString() === productId);
         if (productIndex === -1) {
             res.status(404).json({ message: "Product not found in cart" });
             return;
         }
         if (quantity === 0) {
-            // Remove the product from the cart if quantity is 0
             cart.products.splice(productIndex, 1);
         }
         else {
-            // Update quantity if it's greater than 0
             cart.products[productIndex].quantity = quantity;
         }
         yield cart.save();
@@ -106,7 +106,7 @@ exports.updateCartItem = updateCartItem;
 const removeCartItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
         const { productId } = req.params;
         const cart = yield cart_model_1.default.findOne({ userId });
         if (!cart) {
@@ -126,7 +126,7 @@ exports.removeCartItem = removeCartItem;
 const clearCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
         const cart = yield cart_model_1.default.findOne({ userId });
         if (!cart) {
             res.status(404).json({ message: "Cart not found" });

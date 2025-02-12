@@ -30,7 +30,7 @@
 
 /* Input Fields */
 .modal-content input {
-  width: 90%; /* Updated input width */
+  width: 94%; /* Updated input width */
   padding: 10px;
   margin: 10px 0;
   border: 1px solid #ccc;
@@ -39,7 +39,7 @@
 
 /* Authentication Button */
 .auth-btn {
-  width: 90%; /* Keeping button width same as inputs */
+  width: 95%; /* Keeping button width same as inputs */
   padding: 10px;
   background-color: #f8c102;
   border: none;
@@ -50,7 +50,9 @@
 }
 
 .auth-btn:hover {
-  background-color: #e6b800;
+  background-color: #ffb300;
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(255, 204, 0, 0.5);
 }
 
 /* Close Button */
@@ -81,4 +83,26 @@ p {
 
 .link:hover {
   text-decoration: underline;
+}
+
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  flex: 1;
+  padding-right: 40px;
+  width: 60%;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #555;
 }

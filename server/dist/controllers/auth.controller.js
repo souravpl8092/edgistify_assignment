@@ -22,7 +22,6 @@ dotenv_1.default.config();
 // POST REQUEST --> To create new user account
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // ✅ Joi validation schema
         const schema = joi_1.default.object({
             name: joi_1.default.string().min(3).max(30).required(),
             email: joi_1.default.string().email().required(),
@@ -60,33 +59,41 @@ exports.registerUser = registerUser;
 // POST REQUEST --> To login user account
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Check if email exists
-        const user = yield user_model_1.default.findOne({ email: req.body.email });
+        const { email, password } = req.body;
+        // ✅ Check if user exists
+        const user = yield user_model_1.default.findOne({ email });
         if (!user) {
-            res.status(400).json({ error: "Email not found" });
+            res.status(400).json({ error: "Invalid email or password" });
             return;
         }
-        // Validate password
-        const validPassword = yield bcrypt_1.default.compare(req.body.password, user.password);
+        // ✅ Validate password
+        const validPassword = yield bcrypt_1.default.compare(password, user.password);
         if (!validPassword) {
-            res.status(400).json({ error: "Invalid password" });
+            res.status(400).json({ error: "Invalid email or password" });
             return;
         }
-        // Ensure JWT_SECRET is defined
+        // ✅ Ensure JWT_SECRET is defined
         const secret = process.env.TOKEN;
         if (!secret) {
             throw new Error("JWT secret is not defined in environment variables");
         }
-        // Generate JWT token
-        const token = jsonwebtoken_1.default.sign({ _id: user._id }, secret, { expiresIn: "1h" });
-        // Send response with token
-        res.header("Authorization", token).json({ token });
+        // ✅ Generate JWT token
+        const token = jsonwebtoken_1.default.sign({ _id: user._id, name: user.name, email: user.email }, secret);
+        // ✅ Send response with token & username
+        res.status(200).json({
+            message: "Login successful",
+            token,
+            user: {
+                name: user.name,
+                email: user.email,
+            },
+        });
     }
     catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Unknown error";
-        res
-            .status(500)
-            .json({ error: "Internal Server Error", details: errorMessage });
+        res.status(500).json({
+            error: "Internal Server Error",
+            details: err.message,
+        });
     }
 });
 exports.loginUser = loginUser;

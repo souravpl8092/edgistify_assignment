@@ -20,8 +20,8 @@ export const getCartByUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    const userId = req.user?.id; // Extract userId from token
-    const cart = await Cart.findOne({ userId }).populate("products.productId");
+    const userId = req.user?._id;
+    const cart = await Cart.findOne({ userId });
 
     if (!cart) {
       res.status(404).json({ message: "Cart not found" });
@@ -36,22 +36,26 @@ export const getCartByUser = async (
 
 // ✅ POST - Add item to cart
 export const addToCart = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userId = req.user?.id;
-    const { productId, quantity } = req.body;
+  const userId = req.user?._id;
+  const { productId, title, price, image, quantity } = req.body;
 
+  try {
     let cart = await Cart.findOne({ userId });
 
     if (!cart) {
-      cart = new Cart({ userId, products: [{ productId, quantity }] });
+      cart = new Cart({
+        userId,
+        products: [{ productId, title, price, image, quantity }],
+      });
     } else {
       const existingProduct = cart.products.find(
         (p) => p.productId.toString() === productId
       );
+
       if (existingProduct) {
         existingProduct.quantity += quantity;
       } else {
-        cart.products.push({ productId, quantity });
+        cart.products.push({ productId, title, price, image, quantity });
       }
     }
 
@@ -68,7 +72,7 @@ export const updateCartItem = async (
   res: Response
 ): Promise<void> => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?._id;
     const { productId, quantity } = req.body;
 
     const cart = await Cart.findOne({ userId });
@@ -78,7 +82,6 @@ export const updateCartItem = async (
       return;
     }
 
-    // Find the product in the cart
     const productIndex = cart.products.findIndex(
       (p) => p.productId.toString() === productId
     );
@@ -89,10 +92,8 @@ export const updateCartItem = async (
     }
 
     if (quantity === 0) {
-      // Remove the product from the cart if quantity is 0
       cart.products.splice(productIndex, 1);
     } else {
-      // Update quantity if it's greater than 0
       cart.products[productIndex].quantity = quantity;
     }
 
@@ -109,7 +110,7 @@ export const removeCartItem = async (
   res: Response
 ): Promise<void> => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?._id;
     const { productId } = req.params;
 
     const cart = await Cart.findOne({ userId });
@@ -133,7 +134,7 @@ export const removeCartItem = async (
 // ✅ DELETE - Clear entire cart
 export const clearCart = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?._id;
 
     const cart = await Cart.findOne({ userId });
 

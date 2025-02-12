@@ -15,16 +15,16 @@ const authenticate = (
   res: Response,
   next: NextFunction
 ): void => {
-  const token = req.header("Authorization");
+  const token = req.header("Authorization")?.split(" ")[1];
   if (!token) {
     res.status(401).json({ message: "Access denied" });
-    return; // Ensure function exits after sending a response
+    return;
   }
 
   try {
     const decoded = jwt.verify(token, process.env.TOKEN as string);
     req.user = decoded;
-    next(); // Call `next()` only if verification succeeds
+    next();
   } catch (err) {
     res.status(400).json({ message: "Invalid token" });
   }

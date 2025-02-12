@@ -13,7 +13,6 @@ export const registerUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    // ✅ Joi validation schema
     const schema = Joi.object({
       name: Joi.string().min(3).max(30).required(),
       email: Joi.string().email().required(),
@@ -56,38 +55,47 @@ export const registerUser = async (
 // POST REQUEST --> To login user account
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Check if email exists
-    const user = await User.findOne({ email: req.body.email });
+    const { email, password } = req.body;
+
+    // ✅ Check if user exists
+    const user = await User.findOne({ email });
     if (!user) {
-      res.status(400).json({ error: "Email not found" });
+      res.status(400).json({ error: "Invalid email or password" });
       return;
     }
 
-    // Validate password
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
+    // ✅ Validate password
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      res.status(400).json({ error: "Invalid password" });
+      res.status(400).json({ error: "Invalid email or password" });
       return;
     }
 
-    // Ensure JWT_SECRET is defined
+    // ✅ Ensure JWT_SECRET is defined
     const secret = process.env.TOKEN as string;
     if (!secret) {
       throw new Error("JWT secret is not defined in environment variables");
     }
 
-    // Generate JWT token
-    const token = jwt.sign({ _id: user._id }, secret, { expiresIn: "1h" });
+    // ✅ Generate JWT token
+    const token = jwt.sign(
+      { _id: user._id, name: user.name, email: user.email },
+      secret
+    );
 
-    // Send response with token
-    res.header("Authorization", token).json({ token });
+    // ✅ Send response with token & username
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+      },
+    });
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : "Unknown error";
-    res
-      .status(500)
-      .json({ error: "Internal Server Error", details: errorMessage });
+    res.status(500).json({
+      error: "Internal Server Error",
+      details: (err as Error).message,
+    });
   }
 };
